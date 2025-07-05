@@ -134,8 +134,13 @@ const App = () => {
     allowFacebookPost: true
   });
 
-  // Check if today is check-in day (for demo, we'll make it always available)
-  const isCheckInDay = true;
+  // Check-in date logic - for demo, let's simulate different scenarios
+  const reservationCheckInDate = new Date('2024-12-20'); // Example check-in date
+  const today = new Date();
+  const isCheckInDay = today.toDateString() === reservationCheckInDate.toDateString();
+  
+  // For demo purposes, you can uncomment the line below to always enable check-in
+  // const isCheckInDay = true;
 
   const sections = [
     { id: 'welcome', label: 'Welcome', icon: Heart },
@@ -500,19 +505,47 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                 <span>Ocean City, Maryland</span>
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-4">
-              <div className="text-center">
-                <Waves className="w-8 h-8 mx-auto mb-1" />
-                <span className="text-sm">Waterfront</span>
-              </div>
-              <div className="text-center">
-                <Users className="w-8 h-8 mx-auto mb-1" />
-                <span className="text-sm">Sleeps 8</span>
-              </div>
-              <div className="text-center">
-                <Bed className="w-8 h-8 mx-auto mb-1" />
-                <span className="text-sm">4 Bedrooms</span>
-              </div>
+            
+            {/* Check-in Button */}
+            <div className="hidden md:block">
+              <button
+                onClick={() => isCheckInDay && setShowCheckInModal(true)}
+                disabled={!isCheckInDay}
+                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 flex items-center space-x-3 ${
+                  isCheckInDay
+                    ? 'bg-green-500 text-white hover:bg-green-600 shadow-lg hover:shadow-xl transform hover:scale-105'
+                    : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                }`}
+              >
+                <Key className="w-6 h-6" />
+                <div className="text-left">
+                  <div className="text-lg font-bold">
+                    {isCheckInDay ? 'Check In Now' : 'Check-in Unavailable'}
+                  </div>
+                  <div className="text-sm opacity-90">
+                    {isCheckInDay 
+                      ? 'Ready for your arrival!' 
+                      : `Available ${reservationCheckInDate.toLocaleDateString()}`
+                    }
+                  </div>
+                </div>
+              </button>
+            </div>
+            
+            {/* Mobile Check-in Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => isCheckInDay && setShowCheckInModal(true)}
+                disabled={!isCheckInDay}
+                className={`px-4 py-3 rounded-lg font-bold transition-all duration-200 flex items-center space-x-2 ${
+                  isCheckInDay
+                    ? 'bg-green-500 text-white hover:bg-green-600'
+                    : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                }`}
+              >
+                <Key className="w-5 h-5" />
+                <span>{isCheckInDay ? 'Check In' : 'Unavailable'}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -625,7 +658,7 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                 <div className="grid md:grid-cols-3 gap-4 text-gray-700">
                   <div>
                     <p className="font-medium">Check-in</p>
-                    <p className="text-lg">Today, 4:00 PM</p>
+                    <p className="text-lg">{reservationCheckInDate.toLocaleDateString()}, 4:00 PM</p>
                   </div>
                   <div>
                     <p className="font-medium">Check-out</p>
@@ -734,7 +767,7 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                {isCheckInDay ? 'Complete Check-in Process' : 'Check-in Available on Arrival Day'}
+                {isCheckInDay ? 'Complete Check-in Process' : `Check-in Available ${reservationCheckInDate.toLocaleDateString()}`}
               </button>
             </SectionCard>
           </div>
