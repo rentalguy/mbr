@@ -89,7 +89,6 @@ const App = () => {
 
   const sections = [
     { id: 'welcome', label: 'Welcome', icon: Heart },
-    { id: 'chat', label: 'Chat Assistant', icon: MessageCircle },
     { id: 'media', label: 'Photos & Tour', icon: Camera },
     { id: 'checkin', label: 'Check-in', icon: Key },
     { id: 'property', label: 'Property Info', icon: Home },
@@ -321,7 +320,9 @@ What would you like to know about?`,
 
   const handleSuggestionClick = (suggestion: string) => {
     setCurrentMessage(suggestion);
-    handleSendMessage();
+    setTimeout(() => {
+      handleSendMessage();
+    }, 100);
   };
 
   const handleCheckInSubmit = () => {
@@ -407,6 +408,59 @@ What would you like to know about?`,
         {/* Welcome Section */}
         {activeSection === 'welcome' && (
           <div className="space-y-8">
+            {/* Chat Interface */}
+            <SectionCard>
+              <div className="flex items-center mb-6">
+                <Bot className="w-8 h-8 text-blue-500 mr-3" />
+                <h2 className="text-2xl font-bold text-gray-800">Your Personal Assistant</h2>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-4 h-80 overflow-y-auto mb-4">
+                {chatMessages.map((message) => (
+                  <div key={message.id} className={`mb-4 ${message.type === 'user' ? 'text-right' : 'text-left'}`}>
+                    <div className={`inline-block max-w-3xl p-3 rounded-lg ${
+                      message.type === 'user' 
+                        ? 'bg-blue-500 text-white' 
+                        : 'bg-white text-gray-800 shadow-sm'
+                    }`}>
+                      <div className="whitespace-pre-line">{message.content}</div>
+                      {message.suggestions && (
+                        <div className="mt-3 space-y-2">
+                          {message.suggestions.map((suggestion, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="block w-full text-left p-2 bg-blue-50 hover:bg-blue-100 rounded text-blue-700 text-sm transition-colors"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ask me anything about your stay..."
+                  className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </SectionCard>
+
+            {/* Welcome Content */}
             <SectionCard>
               <div className="text-center mb-8">
                 <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
@@ -456,62 +510,6 @@ What would you like to know about?`,
                     <p className="text-lg">4 Adults</p>
                   </div>
                 </div>
-              </div>
-            </SectionCard>
-          </div>
-        )}
-
-        {/* Chat Section */}
-        {activeSection === 'chat' && (
-          <div className="space-y-8">
-            <SectionCard>
-              <div className="flex items-center mb-6">
-                <Bot className="w-8 h-8 text-blue-500 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-800">Your Personal Assistant</h2>
-              </div>
-              
-              <div className="bg-gray-50 rounded-xl p-4 h-96 overflow-y-auto mb-4">
-                {chatMessages.map((message) => (
-                  <div key={message.id} className={`mb-4 ${message.type === 'user' ? 'text-right' : 'text-left'}`}>
-                    <div className={`inline-block max-w-3xl p-3 rounded-lg ${
-                      message.type === 'user' 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-white text-gray-800 shadow-sm'
-                    }`}>
-                      <div className="whitespace-pre-line">{message.content}</div>
-                      {message.suggestions && (
-                        <div className="mt-3 space-y-2">
-                          {message.suggestions.map((suggestion, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleSuggestionClick(suggestion)}
-                              className="block w-full text-left p-2 bg-blue-50 hover:bg-blue-100 rounded text-blue-700 text-sm transition-colors"
-                            >
-                              {suggestion}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Ask me anything about your stay..."
-                  className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  <Send className="w-5 h-5" />
-                </button>
               </div>
             </SectionCard>
           </div>
