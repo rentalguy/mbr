@@ -145,12 +145,10 @@ const App = () => {
   const sections = [
     { id: 'welcome', label: 'Welcome', icon: Heart },
     { id: 'media', label: 'Photos & Tour', icon: Camera },
-    { id: 'checkin', label: 'Check-in', icon: Key },
     { id: 'property', label: 'Property Info', icon: Home },
     { id: 'amenities', label: 'Amenities', icon: Star },
     { id: 'local', label: 'Local Guide', icon: MapPin },
-    { id: 'guestbook', label: 'Guestbook', icon: BookOpen },
-    { id: 'checkout', label: 'Check-out', icon: CheckCircle }
+    { id: 'guestbook', label: 'Guestbook', icon: BookOpen }
   ];
 
   const amenities = [
@@ -567,6 +565,41 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
         {/* Welcome Section */}
         {activeSection === 'welcome' && (
           <div className="space-y-8">
+            {/* Welcome Content */}
+            <SectionCard>
+              <div className="text-center mb-8">
+                <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Your Bayside Getaway!</h2>
+                <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                  We're thrilled to have you stay at Morgan's Bayside Retreat. This beautiful waterfront property 
+                  offers the perfect blend of relaxation and adventure, with stunning bay views and easy access 
+                  to all that Ocean City has to offer.
+                </p>
+              </div>
+
+              {/* Reservation Info */}
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200">
+                <div className="flex items-center mb-4">
+                  <Calendar className="w-6 h-6 text-green-600 mr-3" />
+                  <h3 className="text-xl font-bold text-gray-800">Your Reservation</h3>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4 text-gray-700">
+                  <div>
+                    <p className="font-medium">Check-in</p>
+                    <p className="text-lg">{reservationCheckInDate.toLocaleDateString()}, 4:00 PM</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Check-out</p>
+                    <p className="text-lg">Sunday, 11:00 AM</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Guests</p>
+                    <p className="text-lg">4 Adults</p>
+                  </div>
+                </div>
+              </div>
+            </SectionCard>
+
             {/* Chat Interface */}
             <SectionCard>
               <div className="flex items-center mb-6">
@@ -616,59 +649,6 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                 >
                   <Send className="w-5 h-5" />
                 </button>
-              </div>
-            </SectionCard>
-
-            {/* Welcome Content */}
-            <SectionCard>
-              <div className="text-center mb-8">
-                <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Your Bayside Getaway!</h2>
-                <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-                  We're thrilled to have you stay at Morgan's Bayside Retreat. This beautiful waterfront property 
-                  offers the perfect blend of relaxation and adventure, with stunning bay views and easy access 
-                  to all that Ocean City has to offer.
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center p-6 bg-blue-50 rounded-xl">
-                  <Sun className="w-12 h-12 text-yellow-500 mx-auto mb-3" />
-                  <h3 className="font-bold text-gray-800 mb-2">Perfect Location</h3>
-                  <p className="text-gray-600">Minutes from the beach and boardwalk</p>
-                </div>
-                <div className="text-center p-6 bg-blue-50 rounded-xl">
-                  <Waves className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                  <h3 className="font-bold text-gray-800 mb-2">Waterfront Views</h3>
-                  <p className="text-gray-600">Private dock with breathtaking sunsets</p>
-                </div>
-                <div className="text-center p-6 bg-blue-50 rounded-xl">
-                  <Home className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                  <h3 className="font-bold text-gray-800 mb-2">Modern Comfort</h3>
-                  <p className="text-gray-600">Fully equipped for a perfect stay</p>
-                </div>
-              </div>
-
-              {/* Reservation Info */}
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200">
-                <div className="flex items-center mb-4">
-                  <Calendar className="w-6 h-6 text-green-600 mr-3" />
-                  <h3 className="text-xl font-bold text-gray-800">Your Reservation</h3>
-                </div>
-                <div className="grid md:grid-cols-3 gap-4 text-gray-700">
-                  <div>
-                    <p className="font-medium">Check-in</p>
-                    <p className="text-lg">{reservationCheckInDate.toLocaleDateString()}, 4:00 PM</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Check-out</p>
-                    <p className="text-lg">Sunday, 11:00 AM</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Guests</p>
-                    <p className="text-lg">4 Adults</p>
-                  </div>
-                </div>
               </div>
             </SectionCard>
           </div>
@@ -721,58 +701,6 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
           </div>
         )}
 
-        {/* Check-in Section */}
-        {activeSection === 'checkin' && (
-          <div className="space-y-8">
-            <SectionCard>
-              <div className="flex items-center mb-6">
-                <Key className="w-8 h-8 text-blue-500 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-800">Check-in Instructions</h2>
-              </div>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg">
-                  <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Step 1: Arrival Time</h3>
-                    <p className="text-gray-600">Check-in is available after 4:00 PM. If you need early check-in, please contact us in advance.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg">
-                  <Key className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Step 2: Access Code</h3>
-                    <p className="text-gray-600 mb-2">Your door code is: <span className="font-bold text-blue-600 text-lg">2024</span></p>
-                    <p className="text-gray-600">Enter the code on the keypad and press the lock button. The door will unlock automatically.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4 p-4 bg-yellow-50 rounded-lg">
-                  <Car className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Step 3: Parking</h3>
-                    <p className="text-gray-600">Two parking spots are reserved for you in front of the house. Additional street parking is available if needed.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Check-in Button */}
-              <button
-                onClick={() => setShowCheckInModal(true)}
-                disabled={!isCheckInDay}
-                className={`w-full py-4 rounded-lg font-bold text-lg transition-all ${
-                  isCheckInDay
-                    ? 'bg-green-500 text-white hover:bg-green-600 shadow-lg'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                {isCheckInDay ? 'Complete Check-in Process' : `Check-in Available ${reservationCheckInDate.toLocaleDateString()}`}
-              </button>
-            </SectionCard>
-          </div>
-        )}
-
         {/* Property Info Section */}
         {activeSection === 'property' && (
           <div className="space-y-8">
@@ -814,6 +742,83 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                     <p>• No pets allowed</p>
                     <p>• Quiet hours: 10 PM - 8 AM</p>
                     <p>• No parties or events</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Check-in Instructions */}
+              <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <div className="flex items-center mb-4">
+                  <Key className="w-6 h-6 text-blue-600 mr-3" />
+                  <h3 className="text-xl font-bold text-gray-800">Check-in Instructions</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-4">
+                    <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-gray-800 mb-1">Step 1: Arrival Time</h4>
+                      <p className="text-gray-600">Check-in is available after 4:00 PM. If you need early check-in, please contact us in advance.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-4">
+                    <Key className="w-6 h-6 text-blue-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-gray-800 mb-1">Step 2: Access Code</h4>
+                      <p className="text-gray-600 mb-1">Your door code is: <span className="font-bold text-blue-600 text-lg">2024</span></p>
+                      <p className="text-gray-600">Enter the code on the keypad and press the lock button. The door will unlock automatically.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-4">
+                    <Car className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-gray-800 mb-1">Step 3: Parking</h4>
+                      <p className="text-gray-600">Two parking spots are reserved for you in front of the house. Additional street parking is available if needed.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Check-out Instructions */}
+              <div className="bg-green-50 p-6 rounded-xl border border-green-200">
+                <div className="flex items-center mb-4">
+                  <CheckCircle className="w-6 h-6 text-green-600 mr-3" />
+                  <h3 className="text-xl font-bold text-gray-800">Check-out Instructions</h3>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-3">Before You Leave (11:00 AM)</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li className="flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Start dishwasher if dishes are dirty</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Take out trash to bins outside</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Turn off all lights and AC</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span>Lock all doors and windows</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-3">No Need To...</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Strip beds or wash linens</li>
+                      <li>• Deep clean the property</li>
+                      <li>• Wash dishes (just rinse and load)</li>
+                      <li>• Vacuum or mop floors</li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -930,62 +935,6 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
                     </div>
                   </div>
                 ))}
-              </div>
-            </SectionCard>
-          </div>
-        )}
-
-        {/* Check-out Section */}
-        {activeSection === 'checkout' && (
-          <div className="space-y-8">
-            <SectionCard>
-              <div className="flex items-center mb-6">
-                <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-800">Check-out Instructions</h2>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4 p-4 bg-yellow-50 rounded-lg">
-                  <Clock className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Check-out Time: 11:00 AM</h3>
-                    <p className="text-gray-600">Please vacate the property by 11:00 AM to allow time for cleaning before the next guests arrive.</p>
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-blue-50 p-6 rounded-xl">
-                    <h3 className="font-bold text-gray-800 mb-4">Before You Leave</h3>
-                    <ul className="space-y-2 text-gray-700">
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>Start dishwasher if dishes are dirty</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>Take out trash to bins outside</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>Turn off all lights and AC</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span>Lock all doors and windows</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-green-50 p-6 rounded-xl">
-                    <h3 className="font-bold text-gray-800 mb-4">No Need To...</h3>
-                    <ul className="space-y-2 text-gray-700">
-                      <li>• Strip beds or wash linens</li>
-                      <li>• Deep clean the property</li>
-                      <li>• Wash dishes (just rinse and load)</li>
-                      <li>• Vacuum or mop floors</li>
-                    </ul>
-                  </div>
-                </div>
               </div>
             </SectionCard>
           </div>
