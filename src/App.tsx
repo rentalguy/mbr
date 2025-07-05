@@ -568,7 +568,11 @@ Thank you for choosing our waterfront getaway in Ocean City, MD!
             {/* Welcome Content */}
             <SectionCard>
               <div className="text-center mb-8">
-                <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <img 
+                  src="/mbr-logo-bno.png" 
+                  alt="Morgan's Bayside Retreat Logo" 
+                  className="w-32 h-32 mx-auto mb-6"
+                />
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Your Bayside Getaway!</h2>
                 <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
                   We're thrilled to have you stay at Morgan's Bayside Retreat. This beautiful waterfront property 
