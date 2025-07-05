@@ -33,7 +33,11 @@ import {
   ThumbsUp,
   ThumbsDown,
   X,
-  Image as ImageIcon
+  Image as ImageIcon,
+  BookOpen,
+  PenTool,
+  Facebook,
+  Share2
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -57,6 +61,18 @@ interface NavigationButtonProps {
 interface SectionCardProps {
   children: React.ReactNode;
   className?: string;
+}
+
+interface GuestbookEntry {
+  id: string;
+  name: string;
+  location: string;
+  rating: number;
+  message: string;
+  date: Date;
+  favoriteMemory: string;
+  wouldRecommend: boolean;
+  photos?: string[];
 }
 
 const App = () => {
@@ -84,6 +100,40 @@ const App = () => {
     contactRequest: false
   });
 
+  // Guestbook state
+  const [guestbookEntries, setGuestbookEntries] = useState<GuestbookEntry[]>([
+    {
+      id: '1',
+      name: 'Sarah & Mike Johnson',
+      location: 'Baltimore, MD',
+      rating: 5,
+      message: 'Absolutely magical stay! The sunset views from the dock were breathtaking. We loved cooking breakfast in the beautiful kitchen and spending evenings on the deck. Already planning our return trip!',
+      date: new Date('2024-01-15'),
+      favoriteMemory: 'Watching dolphins swim by during our morning coffee',
+      wouldRecommend: true
+    },
+    {
+      id: '2',
+      name: 'The Rodriguez Family',
+      location: 'Washington, DC',
+      rating: 5,
+      message: 'Perfect family getaway! The kids loved fishing from the dock and we enjoyed being so close to the boardwalk. The house had everything we needed and more. Thank you for an unforgettable vacation!',
+      date: new Date('2024-01-08'),
+      favoriteMemory: 'Family game night in the cozy living room',
+      wouldRecommend: true
+    }
+  ]);
+  const [showGuestbookForm, setShowGuestbookForm] = useState(false);
+  const [guestbookForm, setGuestbookForm] = useState({
+    name: '',
+    location: '',
+    rating: 5,
+    message: '',
+    favoriteMemory: '',
+    wouldRecommend: true,
+    allowFacebookPost: true
+  });
+
   // Check if today is check-in day (for demo, we'll make it always available)
   const isCheckInDay = true;
 
@@ -94,6 +144,7 @@ const App = () => {
     { id: 'property', label: 'Property Info', icon: Home },
     { id: 'amenities', label: 'Amenities', icon: Star },
     { id: 'local', label: 'Local Guide', icon: MapPin },
+    { id: 'guestbook', label: 'Guestbook', icon: BookOpen },
     { id: 'checkout', label: 'Check-out', icon: CheckCircle }
   ];
 
@@ -336,6 +387,81 @@ What would you like to know about?`,
       contactRequest: false
     });
     alert('Thank you for your feedback! We appreciate your input.');
+  };
+
+  const createFacebookPost = (entry: GuestbookEntry) => {
+    const template = `🌊 Another amazing stay at Morgan's Bayside Retreat! 🌊
+
+${entry.name} from ${entry.location} just shared their experience:
+
+"${entry.message}"
+
+⭐ Rating: ${entry.rating}/5 stars
+💫 Favorite Memory: ${entry.favoriteMemory}
+${entry.wouldRecommend ? '👍 Would recommend to others!' : ''}
+
+Thank you for choosing our waterfront getaway in Ocean City, MD! 
+
+#OceanCity #BaysideRetreat #VacationRental #Waterfront #Maryland #GuestReview #OceanCityMD #VacationMemories`;
+
+    // In a real application, you would use the Facebook Graph API
+    // For demo purposes, we'll show what the post would look like
+    console.log('Facebook Post Template:', template);
+    
+    // Simulate Facebook posting
+    alert(`Facebook post created successfully!\n\nPost preview:\n${template.substring(0, 200)}...`);
+  };
+
+  const handleGuestbookSubmit = () => {
+    const newEntry: GuestbookEntry = {
+      id: Date.now().toString(),
+      name: guestbookForm.name,
+      location: guestbookForm.location,
+      rating: guestbookForm.rating,
+      message: guestbookForm.message,
+      date: new Date(),
+      favoriteMemory: guestbookForm.favoriteMemory,
+      wouldRecommend: guestbookForm.wouldRecommend
+    };
+
+    setGuestbookEntries(prev => [newEntry, ...prev]);
+
+    // Create Facebook post if allowed
+    if (guestbookForm.allowFacebookPost) {
+      createFacebookPost(newEntry);
+    }
+
+    // Reset form
+    setGuestbookForm({
+      name: '',
+      location: '',
+      rating: 5,
+      message: '',
+      favoriteMemory: '',
+      wouldRecommend: true,
+      allowFacebookPost: true
+    });
+    setShowGuestbookForm(false);
+
+    alert('Thank you for signing our guestbook! Your entry has been added.');
+  };
+
+  const renderStars = (rating: number, interactive: boolean = false, onRatingChange?: (rating: number) => void) => {
+    return (
+      <div className="flex space-x-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`w-5 h-5 ${
+              star <= rating 
+                ? 'text-yellow-400 fill-current' 
+                : 'text-gray-300'
+            } ${interactive ? 'cursor-pointer hover:text-yellow-400' : ''}`}
+            onClick={() => interactive && onRatingChange && onRatingChange(star)}
+          />
+        ))}
+      </div>
+    );
   };
 
   const NavigationButton: React.FC<NavigationButtonProps> = ({ section, isActive, onClick }) => {
@@ -722,6 +848,60 @@ What would you like to know about?`,
           </div>
         )}
 
+        {/* Guestbook Section */}
+        {activeSection === 'guestbook' && (
+          <div className="space-y-8">
+            <SectionCard>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <BookOpen className="w-8 h-8 text-purple-500 mr-3" />
+                  <h2 className="text-3xl font-bold text-gray-800">Guest Book</h2>
+                </div>
+                <button
+                  onClick={() => setShowGuestbookForm(true)}
+                  className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
+                >
+                  <PenTool className="w-5 h-5" />
+                  <span>Sign Guestbook</span>
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {guestbookEntries.map((entry) => (
+                  <div key={entry.id} className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-xl border border-purple-200">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">{entry.name}</h3>
+                        <p className="text-gray-600">{entry.location}</p>
+                        <p className="text-sm text-gray-500">{entry.date.toLocaleDateString()}</p>
+                      </div>
+                      <div className="text-right">
+                        {renderStars(entry.rating)}
+                        {entry.wouldRecommend && (
+                          <div className="flex items-center mt-2 text-green-600">
+                            <ThumbsUp className="w-4 h-4 mr-1" />
+                            <span className="text-sm">Recommends</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <blockquote className="text-gray-700 italic mb-4 border-l-4 border-purple-300 pl-4">
+                      "{entry.message}"
+                    </blockquote>
+                    
+                    <div className="bg-white p-4 rounded-lg">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">Favorite Memory:</span> {entry.favoriteMemory}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SectionCard>
+          </div>
+        )}
+
         {/* Check-out Section */}
         {activeSection === 'checkout' && (
           <div className="space-y-8">
@@ -872,6 +1052,127 @@ What would you like to know about?`,
                 className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium"
               >
                 Submit Feedback
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Guestbook Form Modal */}
+      {showGuestbookForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-800">Sign Our Guestbook</h3>
+              <button
+                onClick={() => setShowGuestbookForm(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name(s) *
+                  </label>
+                  <input
+                    type="text"
+                    value={guestbookForm.name}
+                    onChange={(e) => setGuestbookForm({...guestbookForm, name: e.target.value})}
+                    placeholder="Your name or family name"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Location *
+                  </label>
+                  <input
+                    type="text"
+                    value={guestbookForm.location}
+                    onChange={(e) => setGuestbookForm({...guestbookForm, location: e.target.value})}
+                    placeholder="City, State"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Overall Rating *
+                </label>
+                {renderStars(guestbookForm.rating, true, (rating) => 
+                  setGuestbookForm({...guestbookForm, rating})
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Share Your Experience *
+                </label>
+                <textarea
+                  value={guestbookForm.message}
+                  onChange={(e) => setGuestbookForm({...guestbookForm, message: e.target.value})}
+                  placeholder="Tell us about your stay at Morgan's Bayside Retreat..."
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 h-24"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Favorite Memory
+                </label>
+                <input
+                  type="text"
+                  value={guestbookForm.favoriteMemory}
+                  onChange={(e) => setGuestbookForm({...guestbookForm, favoriteMemory: e.target.value})}
+                  placeholder="What was your favorite moment during your stay?"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="would-recommend"
+                    checked={guestbookForm.wouldRecommend}
+                    onChange={(e) => setGuestbookForm({...guestbookForm, wouldRecommend: e.target.checked})}
+                    className="mr-2"
+                  />
+                  <label htmlFor="would-recommend" className="text-sm text-gray-700">
+                    I would recommend this property to others
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="facebook-post"
+                    checked={guestbookForm.allowFacebookPost}
+                    onChange={(e) => setGuestbookForm({...guestbookForm, allowFacebookPost: e.target.checked})}
+                    className="mr-2"
+                  />
+                  <label htmlFor="facebook-post" className="text-sm text-gray-700 flex items-center">
+                    <Facebook className="w-4 h-4 mr-1 text-blue-600" />
+                    Allow us to share your review on Facebook
+                  </label>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleGuestbookSubmit}
+                disabled={!guestbookForm.name || !guestbookForm.location || !guestbookForm.message}
+                className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                Sign Guestbook
               </button>
             </div>
           </div>
